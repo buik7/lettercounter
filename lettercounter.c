@@ -1,7 +1,7 @@
 /*******************************************************************************
-* 
-* Purpose: Assignment #3 solution.
 *
+* Purpose: Assignment #3 solution.
+* 
 * Author: Kevin Browne
 *
 *******************************************************************************/
@@ -9,10 +9,13 @@
 #include <string.h>
 #include <ctype.h>
 
+void print_count(int count[], int total, int offset);
+#define NUM_LETTER 26
+
 int main()
 {
   char buffer[1024], input, curchar;
-  int i = 0, count[26];
+  int i = 0, count_lower[NUM_LETTER], count_upper[NUM_LETTER];
 
   // request and read in the string from the user
   printf("Enter text for analysis: ");
@@ -22,56 +25,76 @@ int main()
   buffer[i] = '\0';
 
   // set the letter counts to zero
-  for (i = 0; i < 26; i++) count[i] = 0;
-
-  // Count the occurences of each letter a-z in the string (case insenstive)
-  // in the count array with count[0] for 'a', count[1] for 'b' and so on.
-  // We ensure the character being examined is an uppercase character with
-  // toupper() and then we check if it is in the ASCII range for A-Z (65-90)
-  // to determine if we need to increment a count... if it is we increment
-  // the right index using 65 as an 'offset'.
+  for (i = 0; i < NUM_LETTER; i++) count_lower[i] = count_upper[i] = 0;
+  
+  // Count the occurrences of each letter a-z and A-Z in the buffer string, 
+  // storing the counts into count_lower and count_upper.  We store the 
+  // count for each character in alphabetical order in the counter arrays. 
+  // Knowing that ASCII characters a-z are stored from 97-122, and ASCII 
+  // characters A-Z are stored from 65-90, we can store the counts using 
+  // 97 and 65 as 'offset' values.
   for (i = 0; i < strlen(buffer); i++) {
-    curchar = toupper(buffer[i]);
-    if (curchar >= 65 && curchar <= 90) count[curchar - 65]++;
+    if (buffer[i] >= 97 && buffer[i] <= 122) count_lower[buffer[i] - 97]++;
+    if (buffer[i] >= 65 && buffer[i] <= 90) count_upper[buffer[i] - 65]++;
   }
 
   // Create the letter analysis table
   printf("\n\nLetter Analysis Complete!");
   printf("\n\nLetter    Occurrences    Percentage\n");
   printf("*****************************************\n");
-  for (i = 0; i < 26; i++) {
-    printf("%-10c%-15d%-15.2f\n", i + 65,
-                               count[i],
-                               (((float) count[i]) / strlen(buffer)) * 100);
+  print_count(count_lower, strlen(buffer), 97);
+  print_count(count_upper, strlen(buffer), 65);
+
+  // Find the max and min occuring character in the string
+  int max, min;
+  char max_char, min_char;
+  max = min = count_lower[0];
+  max_char = min_char = 'a';
+
+  // check the lowercase characters, use 97 as the offset to identify the char
+  for (i = 0; i < NUM_LETTER; i++) {
+    if (count_lower[i] < min)
+    {
+      min_char = i + 97;
+      min = count_lower[i];
+    }
+    if (count_lower[i] > max)
+    {
+      max_char = i + 97;
+      max = count_lower[i];
+    }
   }
 
-  // Find the max and min occuring character in the string, in particular the
-  // position in the count array of each character
-  int max, min, max_pos, min_pos;
-  max = min = count[0];
-  min_pos = max_pos = 0;
-  for (i = 0; i < 26; i++) {
-    if (count[i] < min)
+  // check the upper case characters, use 65 as the offset to identify the char
+  for (i = 0; i < NUM_LETTER; i++) {
+    if (count_upper[i] < min)
     {
-      min_pos = i;
-      min = count[i];
+      min_char = i + 65;
+      min = count_upper[i];
     }
-    if (count[i] > max)
+    if (count_upper[i] > max)
     {
-      max_pos = i;
-      max = count[i];
+      max_char = i + 65;
+      max = count_upper[i];
     }
   }
 
-  // Output the max and min occuring character, again using 65 as an offset to
-  // output the character character given ASCII A-Z range from 65-90
-  printf("\nThe most frequently occurring character is %c.\n", max_pos + 65);
-  printf("The least frequently occurring character is %c.\n", min_pos + 65);
+  // Output the max and min occuring character
+  printf("\nMost frequently occurring character: %c\n", max_char);
+  printf("Least frequently occurring character: %c\n", min_char);
 
   return 0;
 }
 
-
-
-
+// prints the counts of characters from a-z or A-Z (based on offset provided),
+// also prints the percentage of the total for each character
+void print_count(int count[], int total, int offset)
+{
+  for (int i = 0; i < NUM_LETTER; i++) {
+  printf("%-10c%-15d%-15.4f\n", 
+         i + offset,
+         count[i],
+         (((float) count[i]) / total) * 100);
+  }
+}
 
