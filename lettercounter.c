@@ -67,8 +67,8 @@ int main()
 
   // Output the max and min occuring character, again using 65 as an offset to
   // output the character character given ASCII A-Z range from 65-90
-  printf("\nThe most frequently occurring character is %c.\n", max_pos + 65);
-  printf("The least frequently occurring character is %c.\n", min_pos + 65);
+  printf("\nMost frequently occurring character: %c\n", max_pos + 65);
+  printf("Least frequently occurring character: %c\n", min_pos + 65);
 
   return 0;
 }
