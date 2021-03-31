@@ -42,7 +42,7 @@ int main()
   printf("\n\nLetter    Occurrences    Percentage\n");
   printf("*****************************************\n");
   for (i = 0; i < NUM_LETTERS; i++) {
-    printf("%-10c%-15d%-15.2f\n", i + 65,
+    printf("%-10c%-15d%-15.4f\n", i + 65,
                                count[i],
                                (((float) count[i]) / strlen(buffer)) * 100);
   }
