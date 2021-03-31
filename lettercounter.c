@@ -9,10 +9,12 @@
 #include <string.h>
 #include <ctype.h>
 
+#define NUM_LETTERS 26
+
 int main()
 {
   char buffer[1024], input, curchar;
-  int i = 0, count[26];
+  int i = 0, count[NUM_LETTERS];
 
   // request and read in the string from the user
   printf("Enter text for analysis: ");
@@ -22,7 +24,7 @@ int main()
   buffer[i] = '\0';
 
   // set the letter counts to zero
-  for (i = 0; i < 26; i++) count[i] = 0;
+  for (i = 0; i < NUM_LETTERS; i++) count[i] = 0;
 
   // Count the occurences of each letter a-z in the string (case insenstive)
   // in the count array with count[0] for 'a', count[1] for 'b' and so on.
@@ -39,7 +41,7 @@ int main()
   printf("\n\nLetter Analysis Complete!");
   printf("\n\nLetter    Occurrences    Percentage\n");
   printf("*****************************************\n");
-  for (i = 0; i < 26; i++) {
+  for (i = 0; i < NUM_LETTERS; i++) {
     printf("%-10c%-15d%-15.2f\n", i + 65,
                                count[i],
                                (((float) count[i]) / strlen(buffer)) * 100);
@@ -50,7 +52,7 @@ int main()
   int max, min, max_pos, min_pos;
   max = min = count[0];
   min_pos = max_pos = 0;
-  for (i = 0; i < 26; i++) {
+  for (i = 0; i < NUM_LETTERS; i++) {
     if (count[i] < min)
     {
       min_pos = i;
